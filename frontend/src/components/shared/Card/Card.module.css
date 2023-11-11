@@ -8,18 +8,18 @@
   text-align: center;
 }
 
-.helloImg {
-  width: 50px;
+.img {
+  width: 40px;
 }
 
 .heading {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
-  margin-left: 10px;
+  margin-left: 13px;
 }
 
 .headingWrapper {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
