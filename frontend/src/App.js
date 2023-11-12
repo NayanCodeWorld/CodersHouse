@@ -2,17 +2,14 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home/Home";
 import Navigation from "./components/shared/Navigation/Navigation";
-import Register from "./pages/Register/Register";
 import Authentcate from "./pages/authenticate/Authenticate/Authenticate";
 import Activate from "./pages/authenticate/Activate/Activate";
 import Rooms from "./pages/Rooms/Rooms";
-
-let isAuth = false;
-let user = {
-  isActivate: true,
-};
+import { useSelector } from "react-redux";
 
 function App() {
+  const { user, isAuth } = useSelector((state) => state.auth);
+
   return (
     <BrowserRouter>
       <Navigation />
@@ -22,7 +19,7 @@ function App() {
           path="/"
           element={
             isAuth ? (
-              !user.isActivate ? (
+              !user.activated ? (
                 <Navigate replace to="/activate" />
               ) : (
                 <Navigate replace to="/rooms" />
@@ -36,7 +33,7 @@ function App() {
           path="authenicate"
           element={
             isAuth ? (
-              !user.isActivate ? (
+              !user.activate ? (
                 <Navigate replace to="/activate" />
               ) : (
                 <Navigate replace to="/rooms" />
@@ -50,7 +47,7 @@ function App() {
           path="activate"
           element={
             isAuth ? (
-              !user.isActivate ? (
+              !user.activate ? (
                 <Activate />
               ) : (
                 <Navigate replace to="/rooms" />
@@ -64,7 +61,7 @@ function App() {
           path="rooms"
           element={
             isAuth ? (
-              !user.isActivate ? (
+              !user.activate ? (
                 <Navigate replace to="/activate" />
               ) : (
                 <Rooms />

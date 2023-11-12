@@ -3,6 +3,8 @@ const hashOtpService = require("../services/hash-service");
 const userService = require("../services/user-service");
 const tokenService = require("../services/token-service");
 
+const UserDto = require("../dtos/user-dto");
+
 class AuthController {
   // Logic for ranome otp
   async sendOtp(req, res) {
@@ -22,10 +24,12 @@ class AuthController {
 
     //send otp
     try {
-      await otpService.sendBySms(phoneNumber, otp);
+      // await otpService.sendBySms(phoneNumber, otp); // for testing purposes
+
       return res.json({
         hash: `${hashOtp}.${expires}`,
         phoneNumber,
+        otp, // for testing purposes
       });
     } catch (error) {
       console.log(error);
@@ -75,7 +79,9 @@ class AuthController {
       httpOnly: true,
     });
 
-    res.json({ accessToken });
+    const userDto = new UserDto(user);
+
+    res.json({ accessToken, user: userDto });
   }
 }
 

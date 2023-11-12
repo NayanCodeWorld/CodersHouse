@@ -14,13 +14,15 @@ const steps = {
   5: StepUsername,
 };
 
+Object.freeze(steps);
+
 const Register = () => {
   const [step, setStep] = useState(1);
-  const Step = steps[step];
+  const CurrentStep = steps[step];
 
-  const onHanldeNext = () => setStep(step + 1);
+  const onHanldeStep = () => setStep(step + 1);
 
-  return <Step onNext={onHanldeNext} />;
+  return <CurrentStep onNext={onHanldeStep} />; // CurrentStep is a variable here
 };
 
 export default Register;
