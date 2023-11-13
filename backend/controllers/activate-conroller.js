@@ -12,7 +12,7 @@ class ActivateController {
     //console.log("1", avatar);
     // Image Base64 encoded
     const buffer = Buffer.from(
-      avatar.replace(/^data:image\/png;base64./, ""),
+      avatar.replace(/^data:image\/(png|jpg|jpeg);base64./, ""),
       "base64"
     );
     //console.log("2", buffer);
