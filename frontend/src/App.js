@@ -33,7 +33,7 @@ function App() {
           path="authenicate"
           element={
             isAuth ? (
-              !user.activate ? (
+              !user.activated ? (
                 <Navigate replace to="/activate" />
               ) : (
                 <Navigate replace to="/rooms" />
@@ -47,7 +47,7 @@ function App() {
           path="activate"
           element={
             isAuth ? (
-              !user.activate ? (
+              !user.activated ? (
                 <Activate />
               ) : (
                 <Navigate replace to="/rooms" />
@@ -61,7 +61,7 @@ function App() {
           path="rooms"
           element={
             isAuth ? (
-              !user.activate ? (
+              !user.activated ? (
                 <Navigate replace to="/activate" />
               ) : (
                 <Rooms />
