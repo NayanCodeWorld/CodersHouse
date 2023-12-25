@@ -13,10 +13,11 @@ const Phone = ({ onNext }) => {
   const dispatch = useDispatch();
 
   const submit = async () => {
+    // check phone number is present or not
+    if (!phoneNumber) return;
     const { data } = await sendOtp({ phoneNumber });
-    console.log(data);
     //store data in GState
-    dispatch(setOtp({ phoneNumber: data.phoneNumber, hash: data.hash }));
+    dispatch(setOtp({ phoneNumber: data?.phoneNumber, hash: data?.hash }));
 
     onNext();
   };

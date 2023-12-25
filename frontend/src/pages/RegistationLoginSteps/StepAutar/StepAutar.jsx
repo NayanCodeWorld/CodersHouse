@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import Card from "../../../components/shared/Card/Card";
 import CustomeButton from "../../../components/shared/CustomeButton/CustomeButton";
+import Loader from "../../../components/shared/Loader/Loader";
 import styles from "./StepAutar.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setAvatar } from "../../../store/userDetailSlice";
 import { activate } from "../../../http";
 import { setAuth } from "../../../store/authSlice";
 
-const StepAutar = ({ onNext }) => {
-  const navigate = useNavigate();
+const StepAutar = () => {
   const dispatch = useDispatch();
   const { name, avatar } = useSelector((state) => state.userDetails);
   const [image, setImage] = useState("/images/logo.png");
+
+  const [loading, setLoading] = useState(false);
+  const [unmounted, setUnmounted] = useState(false);
 
   const captureImage = (e) => {
     const myFile = e.target.files[0];
@@ -25,16 +27,29 @@ const StepAutar = ({ onNext }) => {
   };
 
   const submitAvatar = async () => {
+    if (!name || !avatar) return;
+    setLoading(true);
     try {
       const { data } = await activate({ name, avatar });
-      if (!data.auth) {
-        dispatch(setAuth(data));
+      if (data.auth) {
+        if (unmounted) {
+          dispatch(setAuth(data));
+        }
       }
-      navigate("/rooms");
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      setUnmounted(true);
+    };
+  }, []);
+
+  if (loading) return <Loader message="Activation in progress..." />;
 
   return (
     <div className={styles.cardWrapper}>
@@ -55,7 +70,7 @@ const StepAutar = ({ onNext }) => {
           </label>
         </div>
         <div className={styles.actionButtonWrap}>
-          <CustomeButton onHandleClick={submitAvatar} text="Next" />
+          <CustomeButton onHandleClick={() => submitAvatar()} text="Next" />
         </div>
       </Card>
     </div>

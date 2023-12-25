@@ -13,9 +13,8 @@ const StepName = ({ onNext }) => {
   const [fullName, setFullName] = useState(name);
 
   const submitFullName = () => {
-    if (!fullName) {
-      return;
-    }
+    if (!fullName) return;
+
     dispatch(setName(fullName));
     onNext();
   };
