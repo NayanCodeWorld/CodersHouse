@@ -4,15 +4,17 @@ const UserService = require("../services/user-service");
 const UserDto = require("../dtos/user-dto");
 
 class ActivateController {
+  // Activate user
   async activate(req, res) {
     const { name, avatar } = req.body;
+    //console.log("name:", name);
     if (!name || !avatar) {
-      res.status(404).json({ message: "All fields are required" });
+      return res.status(404).json({ message: "All fields are required" });
     }
-    //console.log("1", avatar);
+    // console.log("avatar >>> >>", avatar);
     // Image Base64 encoded
     const buffer = Buffer.from(
-      avatar.replace(/^data:image\/(png|jpg|jpeg);base64./, ""),
+      avatar.replace(/^data:image\/(png|jpg|jpeg|svg);base64,/, ""),
       "base64"
     );
     //console.log("2", buffer);
@@ -25,23 +27,23 @@ class ActivateController {
         .resize(150, jimp.AUTO)
         .write(path.resolve(__dirname, `../storage/${imagePath}`));
     } catch (error) {
-      res.status(500).json({ message: "Could not process image" });
+      return res.status(500).json({ message: "Could not process image" });
     }
 
     // update user
     try {
       const user = await UserService.findUser({ _id: req.user.id });
       if (!user) {
-        res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
       }
 
       user.activated = true;
       user.name = name;
       user.avatar = `/storage/${imagePath}`;
       user.save();
-      res.json({ user: new UserDto(user), auth: true });
+      return res.json({ user: new UserDto(user), auth: true });
     } catch (e) {
-      res.status(500).json({ message: "Something went wrong" });
+      return res.status(500).json({ message: "Something went wrong" });
     }
   }
 }
