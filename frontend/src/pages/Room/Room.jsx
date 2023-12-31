@@ -1,7 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useWebRTC } from "../../hooks/useWebRTC";
+import styles from "./Room.module.css";
 
 const Room = () => {
-  return <div>Room</div>;
+  const { id: roomId } = useParams();
+  const user = useSelector((state) => state.auth.user);
+
+  const { clients, provideRef } = useWebRTC(roomId, user);
+
+  return (
+    <div>
+      <h1>This is single room</h1>
+      {clients.map((client) => {
+        return (
+          <div className={styles.userHead} key={client.id}>
+            <audio
+              ref={(instance) => provideRef(instance, client.id)}
+              controls
+              autoPlay
+            ></audio>
+            <img
+              src={client.avatar}
+              alt="avatar"
+              className={styles.userAvatar}
+            />
+            <h4>{client.name}</h4>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default Room;
